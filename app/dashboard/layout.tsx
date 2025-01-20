@@ -6,11 +6,12 @@ import DashboardLinks from '../components/DashboardLinks'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Menu } from 'lucide-react'
+import { ThemeToggle } from '../components/ThemeToggle'
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className="min-h-screen w-full grid md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+      <div className="min-h-screen w-full grid md:grid-cols-[280px_1fr] lg:grid-cols-[300px_1fr]">
         <div className="hidden md:block border-r bg-muted/40">
           <div className="flex h-full max-h-screen flex-col gap-2">
             <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
@@ -46,6 +47,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 </nav>
               </SheetContent>
             </Sheet>
+            <div className="ml-auto flex items-center gap-x-4">
+              <ThemeToggle />
+            </div>
           </header>
         </div>
       </div>
