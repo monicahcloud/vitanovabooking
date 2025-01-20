@@ -3,6 +3,9 @@ import { ReactNode } from 'react'
 import Image from 'next/image'
 import logo from '@/public/logo.png'
 import DashboardLinks from '../components/DashboardLinks'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
+import { Menu } from 'lucide-react'
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
@@ -25,7 +28,26 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </div>
-        
+        <div className="flex flex-col">
+          <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  className="md:hidden shrink-0 "
+                  size="icon"
+                  variant="outline"
+                >
+                  <Menu className="size-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="flex flex-col">
+                <nav className="grid gap-2 mt-10">
+                  <DashboardLinks />
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </header>
+        </div>
       </div>
     </>
   )

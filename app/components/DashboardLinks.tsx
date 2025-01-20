@@ -48,6 +48,7 @@ export const dashboardLinks: navLinks[] = [
 ]
 const DashboardLinks = () => {
   const pathName = usePathname()
+  
   return (
     <>
       {dashboardLinks.map((link) => (
