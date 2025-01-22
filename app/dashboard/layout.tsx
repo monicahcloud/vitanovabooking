@@ -19,20 +19,26 @@ import { requireUser } from '../lib/hooks'
 import { signOut } from '../lib/auth'
 import { prisma } from '../lib/prisma'
 import { redirect } from 'next/navigation'
+import { Toaster } from '@/components/ui/sonner'
 
 async function getData(userId: string) {
   const data = await prisma.user.findUnique({
-    where : {
+    where: {
       id: userId,
     },
-    select:{
+    select: {
       userName: true,
-    }
+      grantID: true,
+    },
   })
-  if(!data?.userName){
-    return redirect("/onboarding")
+
+  if (!data?.userName) {
+    return redirect('/onboarding')
   }
-  return data;
+  if (!data.grantID) {
+    return redirect('/onboarding/grant-id')
+  }
+  return data
 }
 
 export default async function DashboardLayout({
@@ -41,7 +47,7 @@ export default async function DashboardLayout({
   children: ReactNode
 }) {
   const session = await requireUser()
-  const data = await getData(session.user?.id as string);
+  const data = await getData(session.user?.id as string)
 
   return (
     <>
@@ -106,20 +112,26 @@ export default async function DashboardLayout({
                     <Link href="/dashboard/settings">Settings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <form className='w-full' action={async () => {
-                        "use server"
+                    <form
+                      className="w-full"
+                      action={async () => {
+                        'use server'
                         await signOut()
-                    }}>
-                      <button className='w-full text-left'>Log Out</button>
+                      }}
+                    >
+                      <button className="w-full text-left">Log Out</button>
                     </form>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </header>
-          <main className='flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6'>{children}</main>
+          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+            {children}
+          </main>
         </div>
       </div>
+      <Toaster richColors closeButton />
     </>
   )
 }
