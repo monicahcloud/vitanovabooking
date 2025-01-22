@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-import { Day } from '@prisma/client'
 
 import { notFound } from 'next/navigation'
 
