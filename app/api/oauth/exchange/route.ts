@@ -38,6 +38,6 @@ export async function GET(req: NextRequest) {
       console.log('Error exchanging code for token:', error)
      
     }
-    redirect('/dashboard')
+    return redirect('/dasbhboard')
 }
 

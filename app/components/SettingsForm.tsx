@@ -69,6 +69,12 @@ export function SettingsForm({ email, fullName, profileImage }: iAppProps) {
           </div>
           <div className="grid gap-y-5">
             <Label>Profile Image</Label>
+            <input
+              type="hidden"
+              name={fields.profileImage.name}
+              key={fields.profileImage.key}
+              value={currentProfileImage}
+            />
             {currentProfileImage ? (
               <div className="relative size-16">
                 <img
@@ -90,15 +96,16 @@ export function SettingsForm({ email, fullName, profileImage }: iAppProps) {
               <UploadDropzone
                 onClientUploadComplete={(res) => {
                   setCurrentProfileImage(res[0].url)
-                  toast.success("Profile image as been uploaded")
+                  toast.success('Profile image as been uploaded')
                 }}
                 endpoint="imageUploader"
-                onUploadError={(error)=>{
-                    console.log('something went wrong', error)
-                    toast.error(error.message)
+                onUploadError={(error) => {
+                  console.log('something went wrong', error)
+                  toast.error(error.message)
                 }}
               />
             )}
+            <p className='text-red-500 text-sm'>{fields.profileImage.errors}</p>
           </div>
         </CardContent>
 
