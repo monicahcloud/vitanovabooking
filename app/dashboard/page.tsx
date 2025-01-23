@@ -17,27 +17,30 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 async function getData(userId: string) {
-  const data = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      userName: true,
-      eventType: {
-        select: {
-          id: true,
-          active: true,
-          title: true,
-          url: true,
-          duration: true,
+  try {
+    const data = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        userName: true,
+        eventType: {
+          select: {
+            id: true,
+            active: true,
+            title: true,
+            url: true,
+            duration: true,
+          },
         },
       },
-    },
-  })
-  if (!data) {
-    return notFound
+    })
+    if (!data) {
+      return notFound()
+    }
+    return data
+  } catch (error) {
+    console.error(error)
+    return notFound()
   }
-  return data
 }
 
 export default async function DashboardPage() {
@@ -77,7 +80,11 @@ export default async function DashboardPage() {
                 <div className="absolute top-2 right-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="icon">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        aria-label="Event settings"
+                      >
                         <Settings className="size-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -92,7 +99,8 @@ export default async function DashboardPage() {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link2 className="mr-2 size-4">Copy</Link2>
+                          <Link2 className="mr-2 h-4 w-4" />
+                          <span>Copy</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                           <Link href={`/dashboard/event/${item.id}`}>
@@ -127,9 +135,8 @@ export default async function DashboardPage() {
                   </div>
                 </Link>
                 <div className="bg-muted px-5 py-3 justify-between items-center flex">
-                  <Switch>
-                    <Button className="">Edit Event</Button>
-                  </Switch>
+                  <Switch></Switch>
+                  <Button className="">Edit Event</Button>
                 </div>
               </div>
             ))}
