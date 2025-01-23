@@ -14,7 +14,11 @@ import CalendarGrid from './CalendarGrid'
  * @param props - CalendarProps<DateValue> containing configuration options for the calendar,
  * including selected date, minimum/maximum dates, and more.
  */
-const Calendar = (props: CalendarProps<DateValue>) => {
+const Calendar = (
+  props: CalendarProps<DateValue> & {
+    isDataUnavailable?: (date: DateValue) => boolean
+  }
+) => {
   const { locale } = useLocale() // Retrieve the current locale for date formatting.
 
   // Initialize the calendar state using react-stately.
@@ -26,7 +30,7 @@ const Calendar = (props: CalendarProps<DateValue>) => {
   })
 
   // Generate ARIA properties for the calendar and navigation buttons.
-  const { calendarProps, prevButtonProps, nextButtonProps, title } =
+  const { calendarProps, prevButtonProps, nextButtonProps } =
     useCalendar(
       props, // Calendar configuration and event handlers.
       state // State management for the calendar (e.g., current month, selected date).
@@ -43,8 +47,8 @@ const Calendar = (props: CalendarProps<DateValue>) => {
         prevButtonProps={prevButtonProps} // Props for the "Previous" button.
       />
 
-      <div className='flex gap-8'>
-        <CalendarGrid state={state}/>
+      <div className="flex gap-8">
+        <CalendarGrid state={state} isDataUnavailable={props.isDataUnavailable} />
       </div>
     </div>
   )

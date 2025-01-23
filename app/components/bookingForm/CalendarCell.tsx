@@ -8,10 +8,12 @@ const CalendarCell = ({
   state,
   date,
   currentMonth,
+  isUnavailable
 }: {
   state: CalendarState
   date: CalendarDate
   currentMonth: CalendarDate
+  isUnavailable?: boolean
 }) => {
   const ref = useRef(null)
 
@@ -21,12 +23,13 @@ const CalendarCell = ({
     isSelected,
     isOutsideVisibleRange,
     isDisabled,
-    isUnavailable,
     formattedDate,
   } = useCalendarCell({ date }, state, ref)
 
   const { focusProps, isFocusVisible } = useFocusRing()
   const isDateToday = isToday(date, getLocalTimeZone())
+
+  const finallyIsDisabled = isDisabled || isUnavailable
   return (
     <>
       <td
@@ -42,9 +45,11 @@ const CalendarCell = ({
           <div
             className={cn(
               'size-full rounded-sm flex items-center justify-center text-sm font-semibold',
-              isDisabled ? 'text-muted-foreground cursor-not-allowed' : '',
+              finallyIsDisabled
+                ? 'text-muted-foreground cursor-not-allowed'
+                : '',
               isSelected ? 'bg-primary text-white' : '',
-              !isSelected && !isDisabled ? 'bg-secondary' : ''
+              !isSelected && !finallyIsDisabled ? 'bg-secondary' : ''
             )}
           >
             {formattedDate}

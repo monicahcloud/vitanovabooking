@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation' // Utility for handling 404 responses
 import Image from 'next/image' // Next.js component for optimized image handling.
 import { CalendarX2, Clock, VideoIcon } from 'lucide-react' // Icons for UI elements.
 import { Separator } from '@/components/ui/separator' // UI component for visual separation.
-import Calendar from '@/app/components/bookingForm/Calendar' // Calendar component for booking interface.
 import RenderCalendar from '@/app/components/bookingForm/RenderCalendar'
 
 // Define the shape of user data.
@@ -58,13 +57,13 @@ async function getData(
     return null // Return null if an error occurs.
   }
 }
-
-// Booking form route component.
 export default async function BookingFormRoute({
-  params,
+  params: rawParams,
 }: {
   params: { username: string; eventUrl: string }
 }) {
+  const params = await Promise.resolve(rawParams) // Ensure params are awaited properly.
+
   const data = await getData(params.username, params.eventUrl) // Fetch data using parameters.
 
   if (!data) return notFound() // Return 404 if no data is found.
@@ -137,7 +136,8 @@ export default async function BookingFormRoute({
             orientation="vertical"
             className="hidden md:block h-full w-[1px]"
           />
-          <RenderCalendar />
+          {/* Pass user availability to RenderCalendar */}
+          <RenderCalendar availability={data.user.availability} />
           <Separator
             orientation="vertical"
             className="hidden md:block h-full w-[1px]"
