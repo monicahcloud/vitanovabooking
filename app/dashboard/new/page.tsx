@@ -1,0 +1,182 @@
+'use client'
+
+import { CreateEventType } from '@/app/actions'
+import { SubmitButton } from '@/app/components/SubmitButtons'
+import { eventTypeSchema } from '@/app/lib/zodSchemas'
+import { Button } from '@/components/ui/button'
+import { ButtonGroup } from '@/components/ui/ButtonGroup'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { useForm } from '@conform-to/react'
+import { parseWithZod } from '@conform-to/zod'
+import Link from 'next/link'
+import { useState } from 'react'
+import { useFormState } from 'react-dom'
+
+type VideoCallProvider = 'Zoom Meeting' | 'Google Meet' | 'Microsoft Teams'
+
+export default function NewEventRoute() {
+  const [activePlatform, setActivePlatform] =
+    useState<VideoCallProvider>('Zoom Meeting')
+  const togglePlatform = (platform: VideoCallProvider) => {
+    setActivePlatform(platform)
+  }
+  const [lastResult, action] = useFormState(CreateEventType, undefined)
+  const [form, fields] = useForm({
+    lastResult,
+
+    onValidate({ formData }) {
+      return parseWithZod(formData, {
+        schema: eventTypeSchema,
+      })
+    },
+    shouldValidate: 'onBlur',
+    shouldRevalidate: 'onInput',
+  })
+
+  return (
+    <div className="items-center w-full h-full flex flex-1 justify-center">
+      <Card>
+        <CardHeader>
+          <CardTitle>Add new appointment type</CardTitle>
+          <CardDescription>
+            Create new appointment type that allows people to book you
+          </CardDescription>
+        </CardHeader>
+        <form noValidate id={form.id} onSubmit={form.onSubmit} action={action}>
+          <CardContent className="grid gap-y-5">
+            <div className="flex flex-col gap-y-2">
+              {' '}
+              <Label>Title</Label>
+              <Input
+                name={fields.title.name}
+                defaultValue={fields.title.initialValue}
+                key={fields.title.key}
+                placeholder="30 minute meeting"
+              />
+              <p className="text-red-500 text-sm">{fields.title.errors}</p>
+            </div>
+            <div className="flex flex-col gap-y-2">
+              <Label>URL Slug</Label>
+              <div className="flex rounded-md">
+                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-muted bg-muted text-sm">
+                  VitaNovaDesign.cloud
+                </span>
+                <Input
+                  name={fields.url.name}
+                  defaultValue={fields.url.initialValue}
+                  key={fields.url.key}
+                  placeholder="Example-url-1"
+                  className="rounded-l-none"
+                />
+              </div>
+              <p className="text-red-500 text-sm">{fields.url.errors}</p>
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <Label>Description</Label>
+              <Textarea
+                name={fields.description.name}
+                defaultValue={fields.description.initialValue}
+                key={fields.description.key}
+                placeholder="Meet me in this meeting to meet me"
+              />
+              <p className="text-red-500 text-sm">
+                {fields.description.errors}
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-y-2">
+              <Label>Duration</Label>
+              <Select
+                name={fields.duration.name}
+                defaultValue={fields.duration.initialValue}
+                key={fields.duration.key}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select duration" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Duration</SelectLabel>
+                    <SelectItem value="15">15 mins</SelectItem>
+                    <SelectItem value="30">30 mins</SelectItem>
+                    <SelectItem value="45">45 mins</SelectItem>
+                    <SelectItem value="60">1 Hour</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <p className="text-red-500 text-sm">{fields.duration.errors}</p>
+            </div>
+            <div className="grid gap-y-2">
+              <input
+                type="hidden"
+                name={fields.videoCallSoftware.name}
+                value={activePlatform}
+              />
+              <Label>Video Call Platform</Label>
+              <ButtonGroup className="">
+                <Button
+                  onClick={() => togglePlatform('Zoom Meeting')}
+                  type="button"
+                  className="w-full"
+                  variant={
+                    activePlatform === 'Zoom Meeting' ? 'secondary' : 'outline'
+                  }
+                >
+                  Zoom
+                </Button>
+                <Button
+                  onClick={() => togglePlatform('Google Meet')}
+                  type="button"
+                  className="w-full"
+                  variant={
+                    activePlatform === 'Google Meet' ? 'secondary' : 'outline'
+                  }
+                >
+                  Google Meet
+                </Button>
+                <Button
+                  variant={
+                    activePlatform === 'Microsoft Teams'
+                      ? 'secondary'
+                      : 'outline'
+                  }
+                  type="button"
+                  className="w-full"
+                  onClick={() => togglePlatform('Microsoft Teams')}
+                >
+                  Microsoft Teams
+                </Button>
+              </ButtonGroup>
+            </div>
+          </CardContent>
+          <CardFooter className="w-full flex justify-between">
+            <Button variant="secondary" asChild>
+              <Link href={'/dashboard'}>Cancel</Link>
+            </Button>
+            <SubmitButton text="Create Event Type" />
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
+  )
+}
