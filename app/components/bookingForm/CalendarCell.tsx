@@ -44,7 +44,7 @@ const CalendarCell = ({
               'size-full rounded-sm flex items-center justify-center text-sm font-semibold',
               isDisabled ? 'text-muted-foreground cursor-not-allowed' : '',
               isSelected ? 'bg-primary text-white' : '',
-              !isSelected && !isDisabled ? 'hover:bg-primary/10' : ''
+              !isSelected && !isDisabled ? 'bg-secondary' : ''
             )}
           >
             {formattedDate}
