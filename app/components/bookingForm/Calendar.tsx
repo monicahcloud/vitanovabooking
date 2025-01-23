@@ -5,6 +5,7 @@ import { useCalendarState } from 'react-stately' // Manages the state of the cal
 import { createCalendar } from '@internationalized/date' // Utility to create a calendar based on the locale.
 import { CalendarProps, DateValue } from '@react-types/calendar' // Type definitions for the calendar props.
 import { CalendarHeader } from './CalendarHeader' // Header component for the calendar (includes navigation buttons).
+import CalendarGrid from './CalendarGrid'
 
 /**
  * Calendar Component
@@ -41,6 +42,10 @@ const Calendar = (props: CalendarProps<DateValue>) => {
         nextButtonProps={nextButtonProps} // Props for the "Next" button.
         prevButtonProps={prevButtonProps} // Props for the "Previous" button.
       />
+
+      <div className='flex gap-8'>
+        <CalendarGrid state={state}/>
+      </div>
     </div>
   )
 }

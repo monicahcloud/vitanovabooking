@@ -5,6 +5,7 @@ import Image from 'next/image' // Next.js component for optimized image handling
 import { CalendarX2, Clock, VideoIcon } from 'lucide-react' // Icons for UI elements.
 import { Separator } from '@/components/ui/separator' // UI component for visual separation.
 import Calendar from '@/app/components/bookingForm/Calendar' // Calendar component for booking interface.
+import RenderCalendar from '@/app/components/bookingForm/RenderCalendar'
 
 // Define the shape of user data.
 type UserData = {
@@ -136,7 +137,7 @@ export default async function BookingFormRoute({
             orientation="vertical"
             className="hidden md:block h-full w-[1px]"
           />
-          <Calendar />
+          <RenderCalendar />
           <Separator
             orientation="vertical"
             className="hidden md:block h-full w-[1px]"
