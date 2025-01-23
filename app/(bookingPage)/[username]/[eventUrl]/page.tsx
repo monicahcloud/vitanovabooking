@@ -57,23 +57,30 @@ async function getData(
     return null // Return null if an error occurs.
   }
 }
+
 export default async function BookingFormRoute({
-  params: rawParams,
+  params,
+  searchParams,
 }: {
   params: { username: string; eventUrl: string }
+  searchParams: { date?: string }
 }) {
-  const params = await Promise.resolve(rawParams) // Ensure params are awaited properly.
-
-  const data = await getData(params.username, params.eventUrl) // Fetch data using parameters.
+  // Fetch data using parameters.
+  const data = await getData(params.username, params.eventUrl)
 
   if (!data) return notFound() // Return 404 if no data is found.
 
-  // Format the current date to include the year.
-  const currentDate = new Date() // Get the current date.
-  const formattedDate = currentDate.toLocaleDateString('en-US', {
+  // Parse the selected date and handle it as UTC.
+  const selectedDate = searchParams.date
+    ? new Date(`${searchParams.date}T00:00:00Z`) // Interpret the input date as UTC.
+    : new Date() // Default to the current date.
+
+  const formattedDate = selectedDate.toLocaleDateString('en-US', {
+    weekday: 'long', // Example: Monday
     year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+    month: 'long', // Example: January
+    day: 'numeric', // Example: 23
+    timeZone: 'UTC', // Ensure consistent UTC formatting.
   })
 
   return (
