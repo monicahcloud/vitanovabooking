@@ -1,3 +1,5 @@
+
+import * as React from 'react'
 import { prisma } from '@/app/lib/prisma' // Importing Prisma client for database access.
 import { Card, CardContent } from '@/components/ui/card' // UI components for layout and styling.
 import { notFound } from 'next/navigation' // Utility for handling 404 responses.
@@ -58,10 +60,11 @@ async function getData(
     return null // Return null if an error occurs.
   }
 }
+/*********************************************************************************************/
 
 export default async function BookingFormRoute({
-  params,
-  searchParams,
+  params, // Destructure to get params directly
+  searchParams, // Destructure to get searchParams
 }: {
   params: { username: string; eventUrl: string }
   searchParams: { date?: string }
@@ -150,7 +153,7 @@ export default async function BookingFormRoute({
             orientation="vertical"
             className="hidden md:block h-full w-[1px]"
           />
-          <TimeTable selectedDate={selectedDate} userName={params.username}/>
+          <TimeTable selectedDate={selectedDate} userName={params.username} />
         </CardContent>
       </Card>
     </div>
