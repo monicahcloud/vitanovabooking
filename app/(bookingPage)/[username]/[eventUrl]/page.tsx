@@ -5,6 +5,7 @@ import Image from 'next/image' // Next.js component for optimized image handling
 import { CalendarX2, Clock, VideoIcon } from 'lucide-react' // Icons for UI elements.
 import { Separator } from '@/components/ui/separator' // UI component for visual separation.
 import RenderCalendar from '@/app/components/bookingForm/RenderCalendar'
+import TimeTable from '@/app/components/bookingForm/TimeTable'
 
 // Define the shape of user data.
 type UserData = {
@@ -72,7 +73,7 @@ export default async function BookingFormRoute({
 
   // Parse the selected date and handle it as UTC.
   const selectedDate = searchParams.date
-    ? new Date(`${searchParams.date}T00:00:00Z`) // Interpret the input date as UTC.
+    ? new Date(`${searchParams.date}T00:00:00`) // Interpret the input date as UTC.
     : new Date() // Default to the current date.
 
   const formattedDate = selectedDate.toLocaleDateString('en-US', {
@@ -149,6 +150,7 @@ export default async function BookingFormRoute({
             orientation="vertical"
             className="hidden md:block h-full w-[1px]"
           />
+          <TimeTable selectedDate={selectedDate} userName={params.username}/>
         </CardContent>
       </Card>
     </div>

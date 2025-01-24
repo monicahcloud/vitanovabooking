@@ -34,9 +34,9 @@ export function CalendarHeader({
       </VisuallyHidden>
 
       <h2 aria-hidden className=" flex-1 align-center font-semibold text-base">
-        {monthName }
+        {monthName}{' '}
         <span className="text-muted-foreground text-sm font-medium">
-            { year}
+          {year}
         </span>
       </h2>
       <div className="flex items-center gap-2">
